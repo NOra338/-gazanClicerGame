@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>GAZAN 67 КЛІКЕР</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body class="theme-street">
+
+  <div class="scanlines"></div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo-wrap">
+      <span class="lvl-icon" id="lvlIcon">🏙️</span>
+      <span class="logo">GAZAN CLICKER</span>
+      <span class="lvl-title" id="lvlTitle">ВУЛИЦЯ</span>
+    </div>
+    <div class="currency-display">
+      <span class="c-icon">67</span>
+      <span class="c-amount" id="currency">0</span>
+      <span class="c-ps" id="perSec">+0/СЕК</span>
+    </div>
+  </header>
+
+  <!-- BUFF BAR -->
+  <div class="buff-bar" id="buffBar" style="display:none">
+    <span class="buff-name" id="buffName">⚡ BUFF</span>
+    <div class="buff-progress">
+      <div class="buff-fill" id="buffBarFill" style="width:100%"></div>
+    </div>
+    <span class="buff-timer" id="buffTimer">10СЕК</span>
+  </div>
+
+  <main class="game-layout">
+
+    <!-- LEFT: STATS + ACHIEVEMENTS -->
+    <aside class="stats-panel">
+      <h2 class="panel-title">► СТАТ</h2>
+      <div class="stat-item"><span class="stat-label">КЛІКІВ</span><span class="stat-value" id="totalClicks">0</span></div>
+      <div class="stat-item"><span class="stat-label">67/КЛК</span><span class="stat-value" id="perClick">1</span></div>
+      <div class="stat-item"><span class="stat-label">67/СЕК</span><span class="stat-value" id="perSecStat">0</span></div>
+      <div class="stat-item"><span class="stat-label">ВСЬОГО</span><span class="stat-value" id="totalEarned">0</span></div>
+
+      <div class="pixel-div"></div>
+
+      <!-- LEVEL ROADMAP -->
+      <h2 class="panel-title">► РІВНІ</h2>
+      <div class="level-roadmap" id="levelRoadmap"></div>
+    </aside>
+
+    <!-- CENTER: CLICKER -->
+    <section class="clicker-center">
+
+      <div class="gazan-stage">
+        <div class="stage-lights">
+          <div class="light l1"></div>
+          <div class="light l2"></div>
+          <div class="light l3"></div>
+        </div>
+
+        <div class="gazan-frame" id="gazanBtn">
+          <div class="pixel-frame-inner">
+            <img src="gazan.png" class="gazan-photo" id="gazanImg" alt="GAZAN" draggable="false"
+              onerror="this.style.display='none';document.getElementById('gazFallback').style.display='flex'"/>
+            <div class="gazan-fallback" id="gazFallback"><div class="fb-t">GAZAN</div><div class="fb-s">🎤 67</div></div>
+            <div class="photo-overlay"></div>
+            <div class="badge-67" id="badge67">67</div>
+            <!-- theme overlay (changes per level) -->
+            <div class="theme-overlay" id="themeOverlay"></div>
+          </div>
+        </div>
+
+        <div class="music-notes">
+          <span class="note n1">♪</span>
+          <span class="note n2">♫</span>
+          <span class="note n3">♩</span>
+          <span class="note n4">♬</span>
+        </div>
+      </div>
+
+      <div class="click-feedback" id="clickFeedback">+<span id="feedbackAmount">1</span> <span class="fb-cur">67</span></div>
+      <div class="click-hint" id="clickHint">[ НАТИСНИ НА ГАЗАНА ]</div>
+
+      <!-- XP BAR -->
+      <div class="xp-wrap">
+        <div class="xp-top">
+          <span class="xp-lbl">LVL <span id="playerLevel">1</span></span>
+          <span class="xp-lbl"><span id="xpCurrent">0</span>/<span id="xpMax">80</span> XP</span>
+        </div>
+        <div class="xp-outer"><div class="xp-fill" id="xpBar" style="width:0%"></div></div>
+      </div>
+    </section>
+
+    <!-- RIGHT: UPGRADES -->
+    <aside class="upgrades-panel">
+      <h2 class="panel-title">► ПОКРАЩЕННЯ</h2>
+      <div id="upgradesList" class="upgrades-list"></div>
+
+      <div class="pixel-div"></div>
+      <h2 class="panel-title">► АЧІВКИ</h2>
+      <div id="achievements" class="achievements-list"></div>
+    </aside>
+
+  </main>
+
+  <div id="floatingNumbers"></div>
+  <script src="game.js"></script>
+</body>
+</html>
