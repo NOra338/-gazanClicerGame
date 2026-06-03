@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎮 ШкільнаВікторина PIXEL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet"/>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+:root {
+  --yellow:#FFE135;--yellow2:#FFB700;--green:#5BDB6F;--green2:#2DA844;
+  --blue:#5BC8FF;--blue2:#1A8ECC;--red:#FF5757;--red2:#CC2222;
+  --purple:#C86BFF;--orange:#FF9B42;--pink:#FF6EB4;
+  --white:#FFF9E6;--cream:#FFF0B0;--dark:#1A1A2E;--dark2:#16213E;--gray:#888;
+  --pixel-shadow:4px 4px 0 #222;--pixel-border:3px solid #222;
+  --font-pixel:'Press Start 2P',monospace;--font-mono:'VT323',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;min-height:100vh;background:var(--dark);font-family:var(--font-mono);font-size:18px;color:var(--white);overflow-x:hidden}
+.screen{display:none;width:100%;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:1rem;position:relative}
+.screen.active{display:flex}
+.screen-inner{width:100%;max-width:640px;display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1rem 0.5rem 2rem}
+.pixel-box{background:var(--dark2);border:var(--pixel-border);box-shadow:var(--pixel-shadow);image-rendering:pixelated}
+.screen-title{font-family:var(--font-pixel);font-size:clamp(0.8rem,3vw,1.1rem);color:var(--yellow);text-shadow:3px 3px 0 #993;text-align:center;letter-spacing:2px;margin:0.5rem 0}
+#screen-splash{background:radial-gradient(ellipse at center,#1a2a4a 0%,#0d0d1a 100%);cursor:pointer}
+.splash-content{display:flex;flex-direction:column;align-items:center;gap:1.5rem;z-index:2;animation:fadeIn 1s ease}
+.pixel-logo{text-align:center}
+.logo-emoji{font-size:4rem;display:block;animation:bounce 1s infinite}
+.title-main{font-family:var(--font-pixel);font-size:clamp(1.4rem,6vw,2.4rem);color:var(--yellow);text-shadow:4px 4px 0 #884400,8px 8px 0 #330;line-height:1.4;text-align:center;letter-spacing:3px}
+.title-sub{font-family:var(--font-pixel);font-size:clamp(0.5rem,2.5vw,0.8rem);color:var(--green);text-shadow:2px 2px 0 #113;letter-spacing:5px;margin-top:0.3rem}
+.blink-text{font-family:var(--font-pixel);font-size:clamp(0.5rem,2vw,0.7rem);color:var(--white);animation:blink 0.8s step-end infinite;letter-spacing:1px}
+.version-tag{font-family:var(--font-mono);font-size:0.85rem;color:var(--gray);letter-spacing:2px}
+.stars{position:absolute;width:100%;height:100%;top:0;left:0;pointer-events:none;background-image:radial-gradient(1px 1px at 10% 20%,#fff 0%,transparent 100%),radial-gradient(1px 1px at 30% 60%,#fff8 0%,transparent 100%),radial-gradient(1px 1px at 50% 10%,#fff 0%,transparent 100%),radial-gradient(1px 1px at 70% 80%,#fff 0%,transparent 100%),radial-gradient(1px 1px at 85% 35%,#fff8 0%,transparent 100%),radial-gradient(2px 2px at 20% 85%,#ffe135 0%,transparent 100%),radial-gradient(2px 2px at 60% 40%,#5bc8ff 0%,transparent 100%),radial-gradient(1px 1px at 90% 15%,#fff 0%,transparent 100%),radial-gradient(1px 1px at 15% 45%,#fff6 0%,transparent 100%),radial-gradient(1px 1px at 75% 55%,#fff 0%,transparent 100%);animation:twinkle 3s ease-in-out infinite alternate}
+#screen-rules{background:linear-gradient(135deg,#0d1b2a 0%,#1a2a1a 100%)}
+.rules-box{width:100%;max-width:520px;padding:1.2rem 1.4rem;display:flex;flex-direction:column;gap:0.7rem;background:#0e2233;border-color:var(--blue);box-shadow:4px 4px 0 var(--blue2)}
+.rule-item{display:flex;align-items:flex-start;gap:0.8rem;font-family:var(--font-mono);font-size:1.15rem;line-height:1.4}
+.rule-icon{font-size:1.3rem;flex-shrink:0;margin-top:2px}
+.rule-item strong{color:var(--yellow);font-family:var(--font-mono)}
+.name-form{display:flex;flex-direction:column;align-items:center;gap:0.5rem}
+.pixel-label{font-family:var(--font-pixel);font-size:0.6rem;color:var(--green);letter-spacing:2px}
+.pixel-input{font-family:var(--font-pixel);font-size:0.75rem;background:#0d0d1a;border:var(--pixel-border);box-shadow:3px 3px 0 #222;color:var(--yellow);padding:0.6rem 1rem;text-transform:uppercase;letter-spacing:2px;outline:none;width:220px;text-align:center}
+.pixel-input::placeholder{color:#555}
+.pixel-input:focus{border-color:var(--yellow);box-shadow:3px 3px 0 var(--yellow2)}
+.pixel-btn{font-family:var(--font-pixel);font-size:clamp(0.55rem,2vw,0.72rem);padding:0.75rem 1.8rem;border:var(--pixel-border);cursor:pointer;transition:transform 0.08s,box-shadow 0.08s;letter-spacing:1px;text-decoration:none;display:inline-block;text-align:center}
+.pixel-btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 #222 !important}
+.btn-green{background:var(--green);color:#0a2a0a;box-shadow:4px 4px 0 var(--green2)}
+.btn-green:hover{background:#79ff8e}
+.btn-yellow{background:var(--yellow);color:#3a2200;box-shadow:4px 4px 0 var(--yellow2)}
+.btn-yellow:hover{background:#fff07a}
+.btn-blue{background:var(--blue);color:#001a33;box-shadow:4px 4px 0 var(--blue2)}
+.btn-blue:hover{background:#90e0ff}
+.btn-gray{background:#444;color:#ccc;box-shadow:4px 4px 0 #222}
+.btn-gray:hover{background:#666}
+.btn-red{background:var(--red);color:#2a0000;box-shadow:4px 4px 0 var(--red2)}
+.btn-red:hover{background:#ff8080}
+.btn-rainbow{background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue),var(--purple));color:#fff;box-shadow:4px 4px 0 #333;text-shadow:1px 1px 0 #000;animation:rainbowShift 2s linear infinite;background-size:200% 100%}
+#screen-select{background:linear-gradient(135deg,#1a1a0d 0%,#2a1a0a 100%)}
+.grade-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:0.8rem;width:100%;max-width:520px}
+.grade-btn{font-family:var(--font-pixel);display:flex;flex-direction:column;align-items:center;padding:0.8rem 1rem;cursor:pointer;transition:transform 0.08s,box-shadow 0.08s,background 0.1s;background:#1a0a2a;border-color:var(--purple);box-shadow:4px 4px 0 #660088;min-width:90px}
+.grade-btn:hover{background:#2e1040;transform:translate(-2px,-2px);box-shadow:6px 6px 0 #660088}
+.grade-btn.selected{background:var(--purple);color:#1a002a;box-shadow:4px 4px 0 #440066}
+.grade-num{font-size:1.8rem;color:var(--yellow);text-shadow:2px 2px 0 #664}
+.grade-label{font-size:0.5rem;color:var(--white);margin-top:0.2rem;letter-spacing:1px}
+.grade-stars{font-size:0.8rem;margin-top:0.2rem}
+.subject-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:0.8rem;width:100%;max-width:520px}
+.subject-btn{font-family:var(--font-pixel);display:flex;flex-direction:column;align-items:center;gap:0.3rem;padding:0.9rem 0.8rem;cursor:pointer;transition:transform 0.08s,box-shadow 0.08s,background 0.1s;background:#0a1a2a;border-color:var(--orange);box-shadow:4px 4px 0 #884400;min-width:110px;font-size:0.55rem;letter-spacing:1px;color:var(--white)}
+.subject-btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 #884400;background:#1a2a3a}
+.subject-btn.selected{background:var(--orange);color:#2a0a00;box-shadow:4px 4px 0 #553300}
+.subj-icon{font-size:1.8rem}
+#screen-quiz{background:linear-gradient(135deg,#0a1a0a 0%,#0a0a2a 100%);justify-content:flex-start;padding-top:0}
+.quiz-header{width:100%;max-width:700px;padding:0.7rem 1rem;background:#0d0d0d;border-bottom:3px solid #333;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem}
+.quiz-meta{display:flex;gap:0.5rem;flex-wrap:wrap}
+.meta-chip{font-family:var(--font-pixel);font-size:0.55rem;background:#222;border:2px solid #555;padding:0.3rem 0.5rem;color:var(--green);letter-spacing:1px}
+.hearts-row{display:flex;gap:0.3rem;font-size:1.3rem}
+.heart{transition:transform 0.3s;display:inline-block}
+.heart.lost{filter:grayscale(1) brightness(0.4);transform:scale(0.8)}
+.heart.shake{animation:heartShake 0.4s}
+.quiz-progress{font-family:var(--font-pixel);font-size:0.6rem;color:var(--yellow);display:flex;align-items:center;gap:0.5rem}
+.progress-bar-wrap{width:80px;height:10px;background:#333;border:2px solid #555}
+.progress-bar-fill{height:100%;background:var(--green);transition:width 0.3s;width:0%}
+.quiz-body{width:100%;max-width:700px;margin:1rem auto;padding:1.5rem 1.2rem;background:#0e1e0e;border-color:var(--green);box-shadow:4px 4px 0 var(--green2);display:flex;flex-direction:column;gap:1rem}
+.timer-wrap{display:flex;align-items:center;gap:0.6rem}
+.timer-bar-bg{flex:1;height:16px;background:#1a1a1a;border:2px solid #444}
+.timer-bar{height:100%;background:var(--green);width:100%;transition:width 1s linear,background 0.5s}
+.timer-bar.warning{background:var(--yellow)}
+.timer-bar.danger{background:var(--red);animation:timerPulse 0.5s infinite}
+.timer-num{font-family:var(--font-pixel);font-size:0.8rem;color:var(--white);min-width:1.8rem;text-align:right}
+.question-text{font-family:var(--font-mono);font-size:clamp(1.1rem,3vw,1.5rem);line-height:1.5;color:var(--cream);text-align:center;min-height:3rem;padding:0.5rem}
+.answers-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.7rem}
+.answer-btn{font-family:var(--font-mono);font-size:clamp(1rem,2.5vw,1.3rem);padding:0.8rem 0.6rem;cursor:pointer;transition:transform 0.08s,background 0.15s;background:#152215;border-color:#3a5a3a;box-shadow:3px 3px 0 #1a3a1a;color:var(--white);text-align:left;line-height:1.3;min-height:3.5rem}
+.answer-btn:hover:not(:disabled){background:#1f3a1f;transform:translate(-1px,-1px);box-shadow:4px 4px 0 #1a3a1a}
+.answer-btn:disabled{cursor:default}
+.answer-btn.correct{background:var(--green)!important;color:#0a2a0a!important;border-color:var(--green2)!important;box-shadow:3px 3px 0 #0a3a0a!important}
+.answer-btn.wrong{background:var(--red)!important;color:#fff!important;border-color:var(--red2)!important;box-shadow:3px 3px 0 #880000!important;animation:shake 0.4s}
+.answer-btn.dim{background:#111!important;color:#444!important;border-color:#333!important;box-shadow:none!important}
+.feedback-msg{font-family:var(--font-pixel);font-size:0.65rem;text-align:center;padding:0.6rem;border:2px solid;animation:popIn 0.3s;letter-spacing:1px}
+.feedback-msg.correct-fb{background:#0a3a0a;color:var(--green);border-color:var(--green2)}
+.feedback-msg.wrong-fb{background:#3a0a0a;color:var(--red);border-color:var(--red2)}
+.feedback-msg.timeout-fb{background:#3a2a0a;color:var(--yellow);border-color:var(--yellow2)}
+#screen-lose{background:radial-gradient(ellipse,#2a0000 0%,#0a0000 100%)}
+#screen-win{background:radial-gradient(ellipse,#002a0a 0%,#000a02 100%)}
+#screen-genius{background:radial-gradient(ellipse,#1a002a 0%,#050010 100%)}
+.big-emoji{font-size:5rem;text-align:center;animation:bounce 0.8s infinite}
+.red-title{color:var(--red)!important;text-shadow:3px 3px 0 var(--red2)!important}
+.green-title{color:var(--green)!important;text-shadow:3px 3px 0 var(--green2)!important}
+.genius-title{color:var(--purple)!important;text-shadow:3px 3px 0 #660099!important;animation:rainbowText 2s linear infinite}
+.result-box{width:100%;max-width:420px;padding:1.2rem;font-family:var(--font-mono);font-size:1.15rem;text-align:center;line-height:1.8}
+.result-box strong{color:var(--yellow)}
+.genius-screen{position:relative}
+.genius-stars{font-size:1.5rem;letter-spacing:0.5rem;animation:spin 4s linear infinite}
+.genius-bounce{animation:geniusBounce 0.6s infinite}
+.genius-box{width:100%;max-width:480px;padding:1.3rem;font-family:var(--font-mono);font-size:1.15rem;text-align:center;line-height:1.7;background:#1a003a;border-color:var(--purple);box-shadow:4px 4px 0 #660099}
+.genius-award{color:var(--yellow);font-family:var(--font-pixel);font-size:0.6rem;margin:0.5rem 0;animation:blink 1s step-end infinite;letter-spacing:1px}
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10;overflow:hidden}
+.confetti-piece{position:absolute;width:10px;height:10px;top:-20px;animation:confettiFall linear forwards}
+#screen-leaderboard{background:linear-gradient(135deg,#0a0a2a 0%,#1a0a2a 100%)}
+.lb-grade-tabs{display:flex;gap:0.4rem;flex-wrap:wrap;justify-content:center}
+.lb-tab{font-family:var(--font-pixel);font-size:0.55rem;padding:0.5rem 0.7rem;cursor:pointer;background:#222;border:var(--pixel-border);box-shadow:3px 3px 0 #111;color:var(--gray);letter-spacing:1px;transition:all 0.1s}
+.lb-tab.active,.lb-tab:hover{background:var(--blue);color:#001a33;box-shadow:3px 3px 0 var(--blue2)}
+.lb-table{width:100%;max-width:580px;background:#050a18;border-color:var(--blue);box-shadow:4px 4px 0 var(--blue2);overflow:hidden}
+.lb-row{display:grid;grid-template-columns:30px 1fr 90px 60px 70px;gap:0.5rem;padding:0.5rem 0.7rem;font-family:var(--font-mono);font-size:1rem;align-items:center;border-bottom:2px solid #1a2a3a}
+.lb-row:last-child{border-bottom:none}
+.lb-header{font-family:var(--font-pixel);font-size:0.45rem;color:var(--blue);background:#0a1428;letter-spacing:1px}
+.lb-row:not(.lb-header):nth-child(even){background:#080d1a}
+.lb-rank-1{color:#FFD700}
+.lb-rank-2{color:#C0C0C0}
+.lb-rank-3{color:#CD7F32}
+.no-entries{text-align:center;padding:1.5rem;color:#555;font-family:var(--font-pixel);font-size:0.55rem}
+.hidden{display:none!important}
+@keyframes blink{50%{opacity:0}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes geniusBounce{0%,100%{transform:scale(1) rotate(-5deg)}50%{transform:scale(1.15) rotate(5deg)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+@keyframes heartShake{0%,100%{transform:scale(1)}30%{transform:scale(1.4) rotate(-10deg)}60%{transform:scale(0.8) rotate(10deg)}}
+@keyframes popIn{from{transform:scale(0.7);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes twinkle{from{opacity:0.6}to{opacity:1}}
+@keyframes timerPulse{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+@keyframes rainbowShift{from{background-position:0% 50%}to{background-position:200% 50%}}
+@keyframes rainbowText{0%{color:var(--red)}20%{color:var(--orange)}40%{color:var(--yellow)}60%{color:var(--green)}80%{color:var(--blue)}100%{color:var(--purple)}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@media(max-width:480px){.answers-grid{grid-template-columns:1fr}.lb-row{grid-template-columns:25px 1fr 70px 50px 55px;font-size:0.85rem}.quiz-header{padding:0.5rem}.quiz-body{margin:0.5rem;padding:1rem 0.7rem}.grade-btn{min-width:75px}.subject-btn{min-width:95px}}
+body::after{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);pointer-events:none;z-index:9999}
+  </style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="screen-splash" class="screen active">
+  <div class="stars"></div>
+  <div class="splash-content">
+    <div class="pixel-logo">
+      <span class="logo-emoji">🏫</span>
+      <h1 class="title-main">ШКОЛО<br>ВІКТОРИНА</h1>
+      <div class="title-sub">PIXEL EDITION</div>
+    </div>
+    <div class="blink-text">▶ НАТИСНИ ЩОБ ПОЧАТИ ◀</div>
+    <div class="version-tag">v2.0 © PIXEL SCHOOL</div>
+  </div>
+</div>
+
+<!-- RULES -->
+<div id="screen-rules" class="screen">
+  <div class="screen-inner">
+    <h2 class="screen-title">📜 ПРАВИЛА ГРИ</h2>
+    <div class="rules-box pixel-box">
+      <div class="rule-item"><span class="rule-icon">🏫</span><p>Обери <strong>клас (рівень)</strong> та <strong>предмет</strong></p></div>
+      <div class="rule-item"><span class="rule-icon">❓</span><p>Кожен рівень містить <strong>15 запитань</strong></p></div>
+      <div class="rule-item"><span class="rule-icon">❤️</span><p>У тебе <strong>3 серця</strong> — 3 помилки = програш</p></div>
+      <div class="rule-item"><span class="rule-icon">🏆</span><p>Пройди без поразки — потрапиш у <strong>Таблицю Лідерів</strong></p></div>
+      <div class="rule-item"><span class="rule-icon">⭐</span><p>Пройди всі 5 предметів одного класу — отримай <strong>секретну ачівку!</strong></p></div>
+      <div class="rule-item"><span class="rule-icon">⏱️</span><p>На кожне запитання є <strong>20 секунд</strong></p></div>
+    </div>
+    <div class="name-form">
+      <label class="pixel-label">ТВОЄ ІМ'Я:</label>
+      <input type="text" id="player-name" class="pixel-input" placeholder="ГРАВЕЦЬ_1" maxlength="12"/>
+    </div>
+    <button class="pixel-btn btn-green" id="btn-start-select">▶ ДАЛІ</button>
+  </div>
+</div>
+
+<!-- SELECT -->
+<div id="screen-select" class="screen">
+  <div class="screen-inner">
+    <h2 class="screen-title">🎓 ОБЕРІТЬ КЛАС</h2>
+    <div class="grade-grid">
+      <button class="grade-btn pixel-box" data-grade="5"><span class="grade-num">5</span><span class="grade-label">КЛАС</span><span class="grade-stars">⭐</span></button>
+      <button class="grade-btn pixel-box" data-grade="6"><span class="grade-num">6</span><span class="grade-label">КЛАС</span><span class="grade-stars">⭐⭐</span></button>
+      <button class="grade-btn pixel-box" data-grade="7"><span class="grade-num">7</span><span class="grade-label">КЛАС</span><span class="grade-stars">⭐⭐⭐</span></button>
+      <button class="grade-btn pixel-box" data-grade="8"><span class="grade-num">8</span><span class="grade-label">КЛАС</span><span class="grade-stars">⭐⭐⭐⭐</span></button>
+      <button class="grade-btn pixel-box" data-grade="9"><span class="grade-num">9</span><span class="grade-label">КЛАС</span><span class="grade-stars">⭐⭐⭐⭐⭐</span></button>
+    </div>
+    <div id="subject-section" class="hidden">
+      <h2 class="screen-title" style="margin-top:1.5rem">📚 ОБЕРІТЬ ПРЕДМЕТ</h2>
+      <div class="subject-grid">
+        <button class="subject-btn pixel-box" data-subject="history"><span class="subj-icon">🏛️</span><span>ІСТОРІЯ</span></button>
+        <button class="subject-btn pixel-box" data-subject="physics"><span class="subj-icon">⚡</span><span>ФІЗИКА</span></button>
+        <button class="subject-btn pixel-box" data-subject="geography"><span class="subj-icon">🌍</span><span>ГЕОГРАФІЯ</span></button>
+        <button class="subject-btn pixel-box" data-subject="math"><span class="subj-icon">➗</span><span>МАТЕМАТИКА</span></button>
+        <button class="subject-btn pixel-box" data-subject="english"><span class="subj-icon">🇬🇧</span><span>АНГЛІЙСЬКА</span></button>
+      </div>
+    </div>
+    <button class="pixel-btn btn-yellow hidden" id="btn-go-quiz">▶ ПОЧАТИ!</button>
+    <button class="pixel-btn btn-gray" id="btn-back-rules" style="margin-top:0.5rem">◀ НАЗАД</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="screen-quiz" class="screen">
+  <div class="quiz-header">
+    <div class="quiz-meta">
+      <span id="quiz-grade-label" class="meta-chip">📚 5 КЛАС</span>
+      <span id="quiz-subject-label" class="meta-chip">🏛️ ІСТОРІЯ</span>
+    </div>
+    <div class="hearts-row" id="hearts-row">
+      <span class="heart" id="h1">❤️</span>
+      <span class="heart" id="h2">❤️</span>
+      <span class="heart" id="h3">❤️</span>
+    </div>
+    <div class="quiz-progress">
+      <span id="q-num">1</span>/15
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill"></div></div>
+    </div>
+  </div>
+  <div class="quiz-body pixel-box">
+    <div class="timer-wrap">
+      <div class="timer-bar-bg"><div class="timer-bar" id="timer-bar"></div></div>
+      <span class="timer-num" id="timer-num">20</span>
+    </div>
+    <div class="question-text" id="question-text">Завантаження...</div>
+    <div class="answers-grid" id="answers-grid">
+      <button class="answer-btn pixel-box" id="ans-0"></button>
+      <button class="answer-btn pixel-box" id="ans-1"></button>
+      <button class="answer-btn pixel-box" id="ans-2"></button>
+      <button class="answer-btn pixel-box" id="ans-3"></button>
+    </div>
+    <div class="feedback-msg hidden" id="feedback-msg"></div>
+  </div>
+</div>
+
+<!-- LOSE -->
+<div id="screen-lose" class="screen">
+  <div class="screen-inner">
+    <div class="result-emoji big-emoji">💀</div>
+    <h2 class="screen-title red-title">ГРА ЗАКІНЧЕНА!</h2>
+    <div class="pixel-box result-box">
+      <p>Ти допустив(-ла) 3 помилки!</p>
+      <p id="lose-score">Правильних відповідей: <strong>0</strong></p>
+      <p id="lose-question">Зупинився(-лась) на запитанні: <strong>1</strong></p>
+    </div>
+    <button class="pixel-btn btn-yellow" id="btn-retry">🔄 СПРОБУВАТИ ЗНОВУ</button>
+    <button class="pixel-btn btn-blue" id="btn-menu-lose">🏠 МЕНЮ</button>
+  </div>
+</div>
+
+<!-- WIN -->
+<div id="screen-win" class="screen">
+  <div class="screen-inner">
+    <div class="confetti-container" id="confetti"></div>
+    <div class="result-emoji big-emoji" id="win-emoji">🏆</div>
+    <h2 class="screen-title green-title" id="win-title">ПЕРЕМОГА!</h2>
+    <div class="pixel-box result-box">
+      <p id="win-score">Правильних відповідей: <strong>15/15</strong></p>
+      <p id="win-time">Витрачено часу: <strong>120 сек</strong></p>
+    </div>
+    <div id="name-save-section" class="name-form">
+      <label class="pixel-label">ЗБЕРЕГТИ РЕЗУЛЬТАТ?</label>
+      <button class="pixel-btn btn-green" id="btn-save-score">💾 ЗБЕРЕГТИ</button>
+    </div>
+    <button class="pixel-btn btn-blue" id="btn-leaderboard">🏆 ТАБЛИЦЯ ЛІДЕРІВ</button>
+    <button class="pixel-btn btn-gray" id="btn-menu-win">🏠 МЕНЮ</button>
+  </div>
+</div>
+
+<!-- GENIUS -->
+<div id="screen-genius" class="screen">
+  <div class="screen-inner genius-screen">
+    <div class="genius-stars">✨🌟✨🌟✨</div>
+    <div class="result-emoji big-emoji genius-bounce">🧠</div>
+    <h2 class="screen-title genius-title">ТИ — ГЕНІЙ!</h2>
+    <div class="pixel-box genius-box">
+      <p>Неймовірно! Ти пройшов(-ла) <strong>ВСІ 5 ПРЕДМЕТІВ</strong> одного класу без поразки!</p>
+      <p class="genius-award">🏅 СЕКРЕТНА АЧІВКА РОЗБЛОКОВАНА 🏅</p>
+      <p><em>"ВСЕЗНАЙКО"</em></p>
+    </div>
+    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="pixel-btn btn-rainbow">🎁 ОТРИМАТИ НАГОРОДУ</a>
+    <button class="pixel-btn btn-gray" id="btn-menu-genius" style="margin-top:0.5rem">🏠 МЕНЮ</button>
+  </div>
+</div>
+
+<!-- LEADERBOARD -->
+<div id="screen-leaderboard" class="screen">
+  <div class="screen-inner">
+    <h2 class="screen-title">🏆 ТАБЛИЦЯ ЛІДЕРІВ</h2>
+    <div class="lb-grade-tabs" id="lb-tabs">
+      <button class="lb-tab active" data-grade="5">5 КЛ</button>
+      <button class="lb-tab" data-grade="6">6 КЛ</button>
+      <button class="lb-tab" data-grade="7">7 КЛ</button>
+      <button class="lb-tab" data-grade="8">8 КЛ</button>
+      <button class="lb-tab" data-grade="9">9 КЛ</button>
+    </div>
+    <div class="lb-table pixel-box" id="lb-table">
+      <div class="lb-header lb-row"><span>#</span><span>ІМ'Я</span><span>ПРЕДМЕТ</span><span>БАЛ</span><span>ЧАС</span></div>
+      <div id="lb-rows"></div>
+    </div>
+    <button class="pixel-btn btn-gray" id="btn-menu-lb">🏠 МЕНЮ</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+//  BANK OF QUESTIONS — 5 subjects × 5 grades × 15 questions
+// ============================================================
+const QUESTIONS = {
+  history: {
+    5: [
+      { q: "Як називалася перша держава на теренах сучасної України?", a: ["Київська Русь","Запорізька Січ","Галицько-Волинське","Скіфія"], correct: 0 },
+      { q: "Хто заснував Київ за легендою?", a: ["Кий, Щек, Хорив і Либідь","Рюрик","Аскольд і Дір","Олег"], correct: 0 },
+      { q: "Яка річка є головною рікою Київської Русі?", a: ["Дніпро","Дунай","Дон","Десна"], correct: 0 },
+      { q: "В якому році за традицією засновано Київ?", a: ["482 рік","862 рік","1000 рік","988 рік"], correct: 0 },
+      { q: "Як звали першого відомого літописця Київської Русі?", a: ["Нестор","Боян","Ярослав","Феодосій"], correct: 0 },
+      { q: "Яка держава була найбільшою сусідкою Київської Русі на сході?", a: ["Хозарський каганат","Монгольська імперія","Візантія","Польща"], correct: 0 },
+      { q: "Яку мову вважають давньоруською?", a: ["Церковнослов'янську","Старогрецьку","Латинську","Арабську"], correct: 0 },
+      { q: "Що таке вотчина?", a: ["Спадкове земельне володіння","Військовий пост","Монастир","Ринок"], correct: 0 },
+      { q: "Яке плем'я жило на місці сучасного Києва?", a: ["Поляни","Древляни","Сіверяни","Уличі"], correct: 0 },
+      { q: "Як називався договір між Руссю і Візантією 911 року?", a: ["Русько-візантійський договір","Берестейська угода","Переяславська угода","Варязька умова"], correct: 0 },
+      { q: "Хто з правителів Русі прийняв хрещення першим?", a: ["Аскольд","Олег","Ігор","Святослав"], correct: 0 },
+      { q: "Що означає слово 'Русь' за однією з версій?", a: ["Назва варязьких воїнів","Колір землі","Назва річки","Ім'я князя"], correct: 0 },
+      { q: "Яка столиця Давньоруської держави?", a: ["Київ","Новгород","Чернігів","Переяслав"], correct: 0 },
+      { q: "Як звали князя, що об'єднав Новгород і Київ?", a: ["Олег","Рюрик","Ігор","Святослав"], correct: 0 },
+      { q: "Де Нестор-літописець написав 'Повість минулих літ'?", a: ["Києво-Печерський монастир","Новгородський собор","Чернігівська фортеця","Галицький замок"], correct: 0 }
+    ],
+    6: [
+      { q: "Коли охрестилася Русь за офіційною датою?", a: ["988 рік","882 рік","1054 рік","1037 рік"], correct: 0 },
+      { q: "Хто провів хрещення Русі?", a: ["Князь Володимир I","Ярослав Мудрий","Ольга","Святослав"], correct: 0 },
+      { q: "Яку назву мав головний храм Київської Русі?", a: ["Собор Святої Софії","Десятинна церква","Михайлівський монастир","Печерська лавра"], correct: 0 },
+      { q: "Хто такий Ярослав Мудрий?", a: ["Великий князь Київський","Монгольський хан","Польський король","Візантійський Emperor"], correct: 0 },
+      { q: "Який документ уклав Ярослав Мудрий?", a: ["Руська Правда","Велика Хартія","Кодекс Юстиніана","Заповіт Нестора"], correct: 0 },
+      { q: "Де відбулася битва між Руссю і печенігами 1036 року?", a: ["Під Києвом","На Дунаї","Під Черніговом","На Дніпрі"], correct: 0 },
+      { q: "Хто написав 'Слово о законі і благодаті'?", a: ["Іларіон","Нестор","Феодосій","Антоній"], correct: 0 },
+      { q: "В якому місті збудований перший Троїцький монастир?", a: ["Київ","Суздаль","Чернігів","Псков"], correct: 0 },
+      { q: "Якою мовою велося богослужіння в Київській Русі?", a: ["Церковнослов'янська","Грецька","Латинська","Давньоруська"], correct: 0 },
+      { q: "Коли Ярослав Мудрий став єдиновладним правителем Русі?", a: ["1019 рік","988 рік","1037 рік","1054 рік"], correct: 0 },
+      { q: "Що таке 'удільне князівство'?", a: ["Частина держави під керуванням князя","Самостійна держава","Монастирські угіддя","Військовий табір"], correct: 0 },
+      { q: "Звідки прийшло до Русі письмо?", a: ["Від Кирила і Мефодія з Болгарії","Від варягів","Від хозарів","Від арабів"], correct: 0 },
+      { q: "Як звали братів-просвітителів, що створили слов'янське письмо?", a: ["Кирило і Мефодій","Борис і Гліб","Антоній і Феодосій","Аскольд і Дір"], correct: 0 },
+      { q: "Що таке 'Десятинна церква'?", a: ["Перша кам'яна церква Русі","Монастир на десяти пагорбах","Церква в Новгороді","Храм Ярослава"], correct: 0 },
+      { q: "Коли помер Ярослав Мудрий?", a: ["1054 рік","1037 рік","1019 рік","1100 рік"], correct: 0 }
+    ],
+    7: [
+      { q: "Коли монголо-татари зруйнували Київ?", a: ["1240 рік","1223 рік","1259 рік","1380 рік"], correct: 0 },
+      { q: "Хто очолював монгольське військо під час походу на Русь?", a: ["Батий","Чингісхан","Тамерлан","Мамай"], correct: 0 },
+      { q: "Яка держава утворилась після розпаду Київської Русі на заході?", a: ["Галицько-Волинське князівство","Московське царство","Литовське князівство","Польське королівство"], correct: 0 },
+      { q: "Хто з галицько-волинських князів носив титул 'короля Русі'?", a: ["Данило Галицький","Роман Мстиславич","Лев Данилович","Юрій I"], correct: 0 },
+      { q: "Коли відбулася битва на річці Калці?", a: ["1223 рік","1240 рік","1380 рік","1200 рік"], correct: 0 },
+      { q: "Яке місто стало столицею Галицько-Волинського князівства?", a: ["Галич","Волинь","Луцьк","Холм"], correct: 0 },
+      { q: "Де монголи заснували свою державу після завоювань?", a: ["Золота Орда","Великий Монгол","Синя Орда","Біла Орда"], correct: 0 },
+      { q: "Яка залежність встановилась між руськими князями і монголами?", a: ["Данницька залежність","Повне завоювання","Союзницькі відносини","Торговельна угода"], correct: 0 },
+      { q: "Яке місто заснував Данило Галицький на честь сина?", a: ["Львів","Данилів","Холм","Бережани"], correct: 0 },
+      { q: "Коли Галицько-Волинське князівство припинило існування?", a: ["У 1340-х роках","1200 рік","1380 рік","1480 рік"], correct: 0 },
+      { q: "Яку роль відігравали ярлики у відносинах Русі і Орди?", a: ["Дозвіл на правління","Торговельна грамота","Судовий вирок","Дипломатичне послання"], correct: 0 },
+      { q: "Хто такий 'баскак'?", a: ["Монгольський збирач данини","Руський воєвода","Половецький хан","Печенізький вождь"], correct: 0 },
+      { q: "В якому місті відбулась рада після смерті Чингісхана?", a: ["Каракорум","Самарканд","Пекін","Сарай"], correct: 0 },
+      { q: "Як називалася ставка золотоординських ханів?", a: ["Сарай","Орда","Тумен","Курулатай"], correct: 0 },
+      { q: "Ким за фахом був Данило Галицький?", a: ["Князем і воїном","Ченцем","Купцем","Митрополитом"], correct: 0 }
+    ],
+    8: [
+      { q: "Коли почалася Хмельниччина (Козацька революція)?", a: ["1648 рік","1654 рік","1635 рік","1700 рік"], correct: 0 },
+      { q: "Хто очолив Козацьку революцію?", a: ["Богдан Хмельницький","Іван Мазепа","Петро Сагайдачний","Іван Сірко"], correct: 0 },
+      { q: "Що таке Переяславська рада 1654 року?", a: ["Угода між Україною і Московією","Козацька конституція","Битва з поляками","Обрання гетьмана"], correct: 0 },
+      { q: "Яке місто було столицею козацького гетьманату?", a: ["Чигирин","Полтава","Батурин","Гадяч"], correct: 0 },
+      { q: "Як називалась козацька форма правління?", a: ["Гетьманщина","Республіка","Монархія","Теократія"], correct: 0 },
+      { q: "Коли відбулась Конотопська битва?", a: ["1659 рік","1648 рік","1700 рік","1709 рік"], correct: 0 },
+      { q: "Хто такий Іван Мазепа?", a: ["Гетьман Лівобережної України","Московський цар","Польський король","Турецький султан"], correct: 0 },
+      { q: "Де і коли відбулась Полтавська битва?", a: ["1709 рік, Полтава","1654 рік, Переяслав","1648 рік, Корсунь","1700 рік, Батурин"], correct: 0 },
+      { q: "Що таке Конституція Пилипа Орлика?", a: ["Перша козацька конституція 1710 р.","Московська угода","Польська хартія","Козацький кодекс 1648 р."], correct: 0 },
+      { q: "Що знищив Петро I після Полтавської битви?", a: ["Батурин","Чигирин","Запорозьку Січ","Гетьманщину"], correct: 0 },
+      { q: "Коли ліквідували Запорозьку Січ?", a: ["1775 рік","1709 рік","1654 рік","1800 рік"], correct: 0 },
+      { q: "Яка угода завершила Тринадцятирічну польсько-руську війну?", a: ["Андрусівське перемир'я","Переяславська угода","Бахчисарайський мир","Кардиський мир"], correct: 0 },
+      { q: "Яка роль Запорозької Січі в Козацькій революції?", a: ["Військова база і центр козацтва","Торговельний центр","Монастир","Польська фортеця"], correct: 0 },
+      { q: "Яке прізвисько мав Богдан Хмельницький серед козаків?", a: ["Батько","Гетьман Гетьманів","Великий","Залізний"], correct: 0 },
+      { q: "Де відбулась вирішальна битва Хмельницького у 1648 р.?", a: ["Під Жовтими Водами та Корсунем","Під Конотопом","Під Берестечком","Під Полтавою"], correct: 0 }
+    ],
+    9: [
+      { q: "Коли почалась Перша світова війна?", a: ["1914 рік","1918 рік","1939 рік","1904 рік"], correct: 0 },
+      { q: "Яка держава проголосила УНР у 1917 році?", a: ["Центральна Рада","Гетьманат Скоропадського","Директорія","Радянська влада"], correct: 0 },
+      { q: "Коли проголошено Акт злуки УНР і ЗУНР?", a: ["22 січня 1919 р.","1 листопада 1918 р.","7 листопада 1917 р.","28 червня 1919 р."], correct: 0 },
+      { q: "Коли відбувся Голодомор в Україні?", a: ["1932–1933 роки","1921–1922 роки","1929–1930 роки","1941–1942 роки"], correct: 0 },
+      { q: "Яка подія сталась 22 червня 1941 року?", a: ["Напад Німеччини на СРСР","Капітуляція Франції","Висадка союзників у Нормандії","Оголошення війни Японії"], correct: 0 },
+      { q: "Де відбулась одна з найбільших танкових битв у 1943 р.?", a: ["Курська дуга","Сталінград","Берлін","Харків"], correct: 0 },
+      { q: "Коли Україна проголосила незалежність?", a: ["24 серпня 1991 р.","1 грудня 1991 р.","16 липня 1990 р.","19 серпня 1991 р."], correct: 0 },
+      { q: "Що підтвердив референдум 1 грудня 1991 р.?", a: ["Незалежність України","Вступ до СРСР","Об'єднання з Росією","Нову конституцію"], correct: 0 },
+      { q: "Коли прийнята Конституція незалежної України?", a: ["28 червня 1996 р.","24 серпня 1991 р.","1 грудня 1991 р.","16 липня 1990 р."], correct: 0 },
+      { q: "Коли відбувся Євромайдан в Україні?", a: ["2013–2014 роки","2004 рік","2010 рік","2019 рік"], correct: 0 },
+      { q: "Що таке 'Помаранчева революція'?", a: ["Протести 2004 р. проти фальсифікації виборів","Революція 1917 р.","Антирадянські протести 1991 р.","Козацьке повстання"], correct: 0 },
+      { q: "Коли Росія анексувала Крим?", a: ["2014 рік","2022 рік","2008 рік","2004 рік"], correct: 0 },
+      { q: "Коли розпочалось повномасштабне вторгнення Росії в Україну?", a: ["24 лютого 2022 р.","14 лютого 2022 р.","24 серпня 2022 р.","1 березня 2022 р."], correct: 0 },
+      { q: "Хто підписав Брестський мир від УНР?", a: ["Делегація Центральної Ради","Гетьман Скоропадський","Симон Петлюра","Михайло Грушевський"], correct: 0 },
+      { q: "Яка столиця незалежної України?", a: ["Київ","Харків","Львів","Дніпро"], correct: 0 }
+    ]
+  },
+  physics: {
+    5: [
+      { q: "Що таке фізика?", a: ["Наука про природу","Наука про речовини","Наука про живих істот","Наука про числа"], correct: 0 },
+      { q: "В яких одиницях вимірюється маса?", a: ["Кілограмах","Метрах","Секундах","Ньютонах"], correct: 0 },
+      { q: "Що таке температура?", a: ["Міра теплового стану тіла","Кількість теплоти","Швидкість руху","Тиск газу"], correct: 0 },
+      { q: "Яким приладом вимірюють температуру?", a: ["Термометром","Барометром","Манометром","Амперметром"], correct: 0 },
+      { q: "Що таке агрегатний стан речовини?", a: ["Форма існування речовини (тверда, рідка, газ)","Склад речовини","Колір речовини","Запах речовини"], correct: 0 },
+      { q: "Яке агрегатний стан має вода при кімнатній температурі?", a: ["Рідкий","Твердий","Газоподібний","Плазмовий"], correct: 0 },
+      { q: "При якій температурі вода кипить за нормального тиску?", a: ["100°C","0°C","37°C","212°C"], correct: 0 },
+      { q: "Що таке 'тіло' у фізиці?", a: ["Будь-який матеріальний об'єкт","Тільки живий організм","Геометрична фігура","Частина простору"], correct: 0 },
+      { q: "Яке явище — фізичне чи хімічне — танення льоду?", a: ["Фізичне","Хімічне","Біологічне","Жодне"], correct: 0 },
+      { q: "Що вимірює лінійка?", a: ["Довжину","Масу","Час","Температуру"], correct: 0 },
+      { q: "Яка одиниця вимірювання часу?", a: ["Секунда","Метр","Кілограм","Ватт"], correct: 0 },
+      { q: "Що таке об'єм тіла?", a: ["Місце, яке займає тіло у просторі","Маса тіла","Поверхня тіла","Форма тіла"], correct: 0 },
+      { q: "В яких одиницях вимірюється довжина в СІ?", a: ["Метр","Сантиметр","Кілометр","Міліметр"], correct: 0 },
+      { q: "Що таке спостереження у фізиці?", a: ["Метод пізнання природи без втручання","Проведення дослідів","Математичні розрахунки","Творча робота"], correct: 0 },
+      { q: "Чим відрізняються речовина і тіло?", a: ["Речовина — з чого зроблено, тіло — конкретний предмет","Нічим","Речовина жива, тіло — ні","Тіло більше за речовину"], correct: 0 }
+    ],
+    6: [
+      { q: "Що таке швидкість?", a: ["Відстань за одиницю часу","Сила, що діє на тіло","Маса тіла","Прискорення руху"], correct: 0 },
+      { q: "Формула рівномірного руху: відстань = ?", a: ["швидкість × час","сила × маса","маса × прискорення","час ÷ швидкість"], correct: 0 },
+      { q: "Що таке сила тяжіння?", a: ["Сила притягання Землі","Сила пружності","Сила тертя","Сила тиску"], correct: 0 },
+      { q: "Одиниця виміру сили в СІ?", a: ["Ньютон","Паскаль","Джоуль","Ват"], correct: 0 },
+      { q: "Що таке тиск?", a: ["Сила, що діє на одиницю площі","Маса тіла","Швидкість руху","Об'єм рідини"], correct: 0 },
+      { q: "Одиниця тиску в СІ?", a: ["Паскаль","Ньютон","Джоуль","Бар"], correct: 0 },
+      { q: "Що таке тертя?", a: ["Сила, що перешкоджає руху","Прискорення","Тиск поверхні","Вага тіла"], correct: 0 },
+      { q: "Яким приладом вимірюють силу?", a: ["Динамометром","Термометром","Барометром","Ваговими терезами"], correct: 0 },
+      { q: "Що таке вага тіла?", a: ["Сила, з якою тіло тисне на опору","Маса тіла","Об'єм тіла","Сила тяжіння"], correct: 0 },
+      { q: "Що таке інерція?", a: ["Властивість тіла зберігати стан руху","Прискорення тіла","Сила тяжіння","Опір середовища"], correct: 0 },
+      { q: "Яка формула для обчислення тиску?", a: ["P = F/S","P = m×g","P = F×S","P = m/V"], correct: 0 },
+      { q: "Що таке рівновага сил?", a: ["Сума сил = 0","Одна сила більша","Сили однакові за напрямом","Немає жодної сили"], correct: 0 },
+      { q: "Яке явище пояснює плавання тіл?", a: ["Архімедова сила","Сила тяжіння","Сила тертя","Сила пружності"], correct: 0 },
+      { q: "Що таке архімедова сила?", a: ["Сила виштовхування рідиною","Сила земного тяжіння","Магнітна сила","Сила тертя"], correct: 0 },
+      { q: "В яких одиницях вимірюється маса?", a: ["Кілограм","Ньютон","Метр","Джоуль"], correct: 0 }
+    ],
+    7: [
+      { q: "Що таке механічна робота?", a: ["A = F × s","A = m × g","A = F / s","A = m × v"], correct: 0 },
+      { q: "Одиниця вимірювання роботи і енергії?", a: ["Джоуль","Ньютон","Ват","Паскаль"], correct: 0 },
+      { q: "Що таке потужність?", a: ["Робота за одиницю часу","Енергія тіла","Сила × прискорення","Момент сили"], correct: 0 },
+      { q: "Одиниця потужності?", a: ["Ват","Джоуль","Ньютон","Кілограм"], correct: 0 },
+      { q: "Яка формула кінетичної енергії?", a: ["Ek = mv²/2","Ek = mgh","Ek = Fs","Ek = P/t"], correct: 0 },
+      { q: "Яка формула потенційної енергії піднятого тіла?", a: ["Ep = mgh","Ep = mv²/2","Ep = Fs","Ep = P×V"], correct: 0 },
+      { q: "Що таке закон збереження енергії?", a: ["Енергія не зникає і не виникає","Тіло прискорюється","Сили рівні","Маса зберігається"], correct: 0 },
+      { q: "Як пов'язані потужність, робота і час? P = ?", a: ["A/t","A×t","F/t","F×t"], correct: 0 },
+      { q: "Яке 'золоте правило' механіки?", a: ["Виграш у силі = програш у відстані","Сила = маса × прискорення","Тиск = сила/площа","Робота = сила × час"], correct: 0 },
+      { q: "Що таке ККД?", a: ["Відношення корисної роботи до витраченої","Відношення сил","Потужність машини","Кількість теплоти"], correct: 0 },
+      { q: "Яка формула другого закону Ньютона?", a: ["F = ma","F = mv","F = m/a","F = ma²"], correct: 0 },
+      { q: "Що таке рівноприскорений рух?", a: ["Рух з постійним прискоренням","Рух з постійною швидкістю","Рух по колу","Рух зі змінним прискоренням"], correct: 0 },
+      { q: "Яка формула прискорення?", a: ["a = Δv/t","a = F/v","a = m/F","a = v/m"], correct: 0 },
+      { q: "Що таке вільне падіння?", a: ["Рух тільки під дією сили тяжіння","Рух в рідині","Рух по похилій","Кругова орбіта"], correct: 0 },
+      { q: "Що таке простий механізм?", a: ["Пристрій для зміни сили чи напряму","Двигун","Джерело енергії","Вимірювальний прилад"], correct: 0 }
+    ],
+    8: [
+      { q: "Що таке електричний струм?", a: ["Упорядкований рух заряджених частинок","Різниця потенціалів","Опір провідника","Потужність кола"], correct: 0 },
+      { q: "Одиниця електричного струму?", a: ["Ампер","Вольт","Ом","Ват"], correct: 0 },
+      { q: "Одиниця напруги?", a: ["Вольт","Ампер","Ом","Фарад"], correct: 0 },
+      { q: "Що виражає закон Ома для ділянки кола?", a: ["I = U/R","U = I×R²","R = U²/I","I = R/U"], correct: 0 },
+      { q: "Що таке електричний опір?", a: ["Властивість провідника перешкоджати струму","Сила струму","Напруга","Робота струму"], correct: 0 },
+      { q: "Одиниця опору?", a: ["Ом","Ампер","Вольт","Ват"], correct: 0 },
+      { q: "Що таке послідовне з'єднання?", a: ["Елементи з'єднані одним ланцюгом","Кілька паралельних гілок","Кільцева схема","Змішана схема"], correct: 0 },
+      { q: "Яка формула потужності електричного струму?", a: ["P = UI","P = U/I","P = I/U","P = U+I"], correct: 0 },
+      { q: "Що таке теплова дія струму (закон Джоуля-Ленца)?", a: ["Q = I²Rt","Q = UIt","Q = IRt","Q = U²t/R"], correct: 0 },
+      { q: "Що таке магнітне поле?", a: ["Особливий вид матерії, що діє на рухомі заряди","Електричне поле","Гравітаційне поле","Електромагнітна хвиля"], correct: 0 },
+      { q: "Хто відкрив електромагнітну індукцію?", a: ["Фарадей","Ом","Ампер","Вольт"], correct: 0 },
+      { q: "Що таке трансформатор?", a: ["Пристрій для зміни напруги","Джерело струму","Вимірювач напруги","Генератор"], correct: 0 },
+      { q: "Яка формула заряду?", a: ["q = It","q = UI","q = P/t","q = R/I"], correct: 0 },
+      { q: "Що таке напівпровідник?", a: ["Речовина між провідником і діелектриком","Метал","Ізолятор","Надпровідник"], correct: 0 },
+      { q: "Яке явище лежить в основі роботи електромотора?", a: ["Дія магнітного поля на провідник зі струмом","Закон Ома","Теплова дія струму","Електрична індукція"], correct: 0 }
+    ],
+    9: [
+      { q: "Що таке атомне ядро?", a: ["Центральна частина атома з протонів і нейтронів","Електронна оболонка","Молекула речовини","Іон"], correct: 0 },
+      { q: "Що таке радіоактивність?", a: ["Самовільний розпад ядер атомів","Поглинання світла","Електромагнітне випромінювання","Рух електронів"], correct: 0 },
+      { q: "Яке випромінювання має найбільшу проникну здатність?", a: ["Гамма","Альфа","Бета","Рентгенівське"], correct: 0 },
+      { q: "Що таке ядерна реакція?", a: ["Перетворення ядер під дією частинок","Хімічна реакція","Розпад молекул","Реакція горіння"], correct: 0 },
+      { q: "Що таке квант світла (фотон)?", a: ["Частинка електромагнітного випромінювання","Електрон","Нейтрон","Протон"], correct: 0 },
+      { q: "Формула енергії фотона?", a: ["E = hν","E = mc²","E = hλ","E = kT"], correct: 0 },
+      { q: "Що таке фотоефект?", a: ["Вибивання електронів світлом","Заряджання тіла","Відбиття світла","Дифракція"], correct: 0 },
+      { q: "Що описує теорія відносності Ейнштейна?", a: ["Залежність маси, часу, простору від швидкості","Рух електронів","Ядерні реакції","Квантові стрибки"], correct: 0 },
+      { q: "Яка формула зв'язку маси і енергії?", a: ["E = mc²","E = hν","F = ma","P = UI"], correct: 0 },
+      { q: "Що таке лазер?", a: ["Джерело когерентного світла","Телескоп","Мікроскоп","Підсилювач звуку"], correct: 0 },
+      { q: "Що таке плазма?", a: ["Четвертий агрегатний стан — іонізований газ","Рідкий метал","Газ під тиском","Тверде тіло при нагріванні"], correct: 0 },
+      { q: "Що таке термоядерна реакція?", a: ["Злиття легких ядер при високій температурі","Розпад важких ядер","Ланцюгова реакція поділу","Бета-розпад"], correct: 0 },
+      { q: "Яка одиниця активності радіоактивного джерела?", a: ["Беккерель","Грей","Зіверт","Рентген"], correct: 0 },
+      { q: "Що таке інтерференція світла?", a: ["Накладання хвиль з підсиленням або гасінням","Відбиття від дзеркала","Заломлення у призмі","Розсіювання частинок"], correct: 0 },
+      { q: "Що таке дифракція?", a: ["Огинання хвилею перешкод","Відбиття хвилі","Заломлення хвилі","Поглинання хвилі"], correct: 0 }
+    ]
+  },
+  geography: {
+    5: [
+      { q: "Що вивчає географія?", a: ["Природу і населення Землі","Тільки гори","Тільки моря","Рослини і тварин"], correct: 0 },
+      { q: "Яка найбільша за площею держава світу?", a: ["Росія","США","Китай","Канада"], correct: 0 },
+      { q: "Яка найдовша річка світу?", a: ["Ніл","Амазонка","Янцзи","Міссісіпі"], correct: 0 },
+      { q: "Яка найвища гора світу?", a: ["Еверест","К2","Монблан","Ельбрус"], correct: 0 },
+      { q: "Скільки материків на Землі?", a: ["6","5","7","4"], correct: 0 },
+      { q: "Яка найбільша пустеля світу?", a: ["Сахара","Аравійська","Гобі","Атакама"], correct: 0 },
+      { q: "Який найбільший океан?", a: ["Тихий","Атлантичний","Індійський","Північний Льодовитий"], correct: 0 },
+      { q: "Яка столиця Франції?", a: ["Париж","Лондон","Берлін","Рим"], correct: 0 },
+      { q: "На якому материку знаходиться Єгипет?", a: ["Африка","Азія","Європа","Америка"], correct: 0 },
+      { q: "Що таке масштаб карти?", a: ["Відношення відстані на карті до реальної","Розмір карти","Умовні позначення","Координати точки"], correct: 0 },
+      { q: "Яке море омиває Україну на півдні?", a: ["Чорне і Азовське","Балтійське","Середземне","Адріатичне"], correct: 0 },
+      { q: "Яка найдовша річка України?", a: ["Дніпро","Дністер","Південний Буг","Десна"], correct: 0 },
+      { q: "Що таке паралелі?", a: ["Горизонтальні лінії на карті (широта)","Вертикальні лінії","Гірські хребти","Кордони держав"], correct: 0 },
+      { q: "Яка планета третя від Сонця?", a: ["Земля","Марс","Венера","Юпітер"], correct: 0 },
+      { q: "Яка форма Землі?", a: ["Куляста (геоїд)","Пласка","Кубічна","Циліндрична"], correct: 0 }
+    ],
+    6: [
+      { q: "Що таке атмосфера?", a: ["Газова оболонка Землі","Водна оболонка","Тверда оболонка","Жива оболонка"], correct: 0 },
+      { q: "Який газ переважає в атмосфері?", a: ["Азот","Кисень","Вуглекислий газ","Аргон"], correct: 0 },
+      { q: "Що таке клімат?", a: ["Багаторічний режим погоди","Денна температура","Опади сьогодні","Швидкість вітру"], correct: 0 },
+      { q: "Що таке гідросфера?", a: ["Водна оболонка Землі","Газова оболонка","Тверда оболонка","Магнітне поле"], correct: 0 },
+      { q: "Яка частка суходолу на поверхні Землі?", a: ["Близько 30%","Близько 70%","Близько 50%","Близько 20%"], correct: 0 },
+      { q: "Що таке літосфера?", a: ["Тверда кам'яна оболонка Землі","Водна оболонка","Газова оболонка","Жива оболонка"], correct: 0 },
+      { q: "Що таке вулкан?", a: ["Гора з виходом магми","Гірське озеро","Глибока западина","Льодовик"], correct: 0 },
+      { q: "Що таке землетрус?", a: ["Коливання земної кори","Виверження вулкана","Повінь","Цунамі"], correct: 0 },
+      { q: "Яка найглибша западина у Світовому океані?", a: ["Маріанська западина","Пуерто-Рико","Зондська","Японська"], correct: 0 },
+      { q: "Що таке дельта річки?", a: ["Розгалужена гирлова частина річки","Витік річки","Вигин річки","Злиття двох річок"], correct: 0 },
+      { q: "Які є природні зони?", a: ["Тундра, тайга, степ, пустеля тощо","Тільки ліси","Тільки степи","Тільки гори"], correct: 0 },
+      { q: "Що таке гумус?", a: ["Родючий шар ґрунту","Корінь рослини","Тип клімату","Тип гірської породи"], correct: 0 },
+      { q: "Яке озеро найглибше у світі?", a: ["Байкал","Каспійське море","Вікторія","Танганьїка"], correct: 0 },
+      { q: "Що таке меридіани?", a: ["Вертикальні лінії на карті (довгота)","Горизонтальні лінії","Межі часових поясів","Гірські хребти"], correct: 0 },
+      { q: "Де знаходиться нульовий меридіан?", a: ["Гринвіч, Велика Британія","Париж, Франція","Москва, Росія","Вашингтон, США"], correct: 0 }
+    ],
+    7: [
+      { q: "Яка найбільша за площею країна Африки?", a: ["Алжир","ДР Конго","Судан","Лівія"], correct: 0 },
+      { q: "Яка найдовша річка Африки?", a: ["Ніл","Конго","Нігер","Замбезі"], correct: 0 },
+      { q: "На якому материку знаходиться Амазонія?", a: ["Південна Америка","Африка","Азія","Австралія"], correct: 0 },
+      { q: "Яка найвища гора Африки?", a: ["Кіліманджаро","Кенія","Рувензорі","Атлас"], correct: 0 },
+      { q: "Яка країна є найбільшою в Азії?", a: ["Китай","Індія","Росія (азіатська частина)","Казахстан"], correct: 0 },
+      { q: "Що таке мусон?", a: ["Сезонний вітер","Постійний вітер","Ураган","Тропічний циклон"], correct: 0 },
+      { q: "Яке море омиває Австралію з заходу?", a: ["Індійський океан","Тихий океан","Коралове море","Тасманове море"], correct: 0 },
+      { q: "Яка найбільша пустеля Азії?", a: ["Гобі","Такла-Макан","Кара-Кум","Аравійська"], correct: 0 },
+      { q: "Яка країна розташована на Піренейському півострові?", a: ["Іспанія і Португалія","Франція і Бельгія","Греція і Болгарія","Норвегія і Швеція"], correct: 0 },
+      { q: "Яка найбільша річка Америки?", a: ["Амазонка","Міссісіпі","Оріноко","Парана"], correct: 0 },
+      { q: "Що таке архіпелаг?", a: ["Група островів","Великий острів","Підводний хребет","Прибережна рівнина"], correct: 0 },
+      { q: "Яка країна має найбільше населення?", a: ["Індія","Китай","США","Бразилія"], correct: 0 },
+      { q: "Де знаходиться водоспад Ігуасу?", a: ["Бразилія / Аргентина","Африка","Австралія","США"], correct: 0 },
+      { q: "Яка найвища гора Європи?", a: ["Монблан","Ельбрус","Монте-Роза","Маттерхорн"], correct: 0 },
+      { q: "Яке найбільше озеро Африки?", a: ["Вікторія","Танганьїка","Ньяса","Чад"], correct: 0 }
+    ],
+    8: [
+      { q: "Яке місто є найбільшим у світі за населенням?", a: ["Токіо","Делі","Шанхай","Мехіко"], correct: 0 },
+      { q: "Яка країна має найвищий ВВП у світі?", a: ["США","Китай","Японія","Німеччина"], correct: 0 },
+      { q: "Що таке урбанізація?", a: ["Зростання частки міського населення","Збільшення народжуваності","Розвиток сільського господарства","Зниження смертності"], correct: 0 },
+      { q: "Яка галузь дає найбільший ВВП у розвинених країнах?", a: ["Сфера послуг","Промисловість","Сільське господарство","Видобуток ресурсів"], correct: 0 },
+      { q: "Що таке демографічна криза?", a: ["Зниження народжуваності і старіння населення","Зростання населення","Масова еміграція","Пандемія хвороб"], correct: 0 },
+      { q: "Яка країна є найбільшим виробником нафти?", a: ["Саудівська Аравія","США","Росія","ОАЕ"], correct: 0 },
+      { q: "Яка країна виробляє найбільше автомобілів?", a: ["Китай","США","Японія","Німеччина"], correct: 0 },
+      { q: "Що таке глобалізація?", a: ["Поглиблення зв'язків між країнами світу","Закриття кордонів","Ізоляція економіки","Регіональний розвиток"], correct: 0 },
+      { q: "Яка організація об'єднує більшість країн світу?", a: ["ООН","ЄС","НАТО","G20"], correct: 0 },
+      { q: "Що таке АПК?", a: ["Агропромисловий комплекс","Атомно-промисловий комплекс","Авіаційний парк країни","Азіатсько-Тихоокеанське співтовариство"], correct: 0 },
+      { q: "Яка країна є найбільшим виробником пшениці?", a: ["Китай","США","Росія","Індія"], correct: 0 },
+      { q: "Що таке рекреаційні ресурси?", a: ["Природні та культурні об'єкти для відпочинку","Запаси нафти","Лісові масиви","Водні ресурси"], correct: 0 },
+      { q: "Яка країна є лідером з виробництва електроенергії?", a: ["Китай","США","Росія","Японія"], correct: 0 },
+      { q: "Що таке мегаполіс?", a: ["Велике місто-агломерація","Столиця держави","Промисловий центр","Портове місто"], correct: 0 },
+      { q: "Яка країна найбільше туристів приймає щороку?", a: ["Франція","США","Іспанія","Китай"], correct: 0 }
+    ],
+    9: [
+      { q: "Яка площа України?", a: ["603 550 км²","400 000 км²","545 000 км²","700 000 км²"], correct: 0 },
+      { q: "Скільки областей в Україні?", a: ["25 (включно з АР Крим)","24","27","20"], correct: 0 },
+      { q: "Яка найвища точка України?", a: ["Говерла","Роман-Кош","Піп Іван","Петрос"], correct: 0 },
+      { q: "Яка найбільша низовина України?", a: ["Придніпровська","Причорноморська","Поліська","Подільська"], correct: 0 },
+      { q: "Яка найбільша річка, що впадає у Дніпро?", a: ["Прип'ять","Десна","Псел","Ворскла"], correct: 0 },
+      { q: "Яка природна зона займає найбільшу площу в Україні?", a: ["Степ","Ліс","Лісостеп","Гори"], correct: 0 },
+      { q: "Яка найбільша за площею область України?", a: ["Одеська","Харківська","Дніпропетровська","Запорізька"], correct: 0 },
+      { q: "Яке місто є найбільшим після Києва?", a: ["Харків","Одеса","Дніпро","Львів"], correct: 0 },
+      { q: "Яка частка чорноземів у ґрунтах України?", a: ["Близько 65-68%","30%","80%","50%"], correct: 0 },
+      { q: "Яка головна проблема екології Чорного моря?", a: ["Забруднення і замор","Підкислення","Знеліснення берегів","Цунамі"], correct: 0 },
+      { q: "Яка найбільша АЕС України?", a: ["Запорізька","Южноукраїнська","Рівненська","Хмельницька"], correct: 0 },
+      { q: "Яке джерело енергії найбільш розвинене в Карпатах?", a: ["Гідроенергетика","Атомна","Теплова","Сонячна"], correct: 0 },
+      { q: "Яка галузь є провідною в економіці Донбасу?", a: ["Важка промисловість і вуглевидобуток","Сільське господарство","Туризм","Легка промисловість"], correct: 0 },
+      { q: "Де знаходиться Асканія-Нова?", a: ["Херсонська область","Запорізька область","Миколаївська область","Одеська область"], correct: 0 },
+      { q: "Яка річка утворює кордон між Україною і Молдовою?", a: ["Дністер","Прут","Тиса","Південний Буг"], correct: 0 }
+    ]
+  },
+  math: {
+    5: [
+      { q: "Скільки буде 15 × 4?", a: ["60","55","65","70"], correct: 0 },
+      { q: "Найбільший спільний дільник 12 і 18?", a: ["6","3","9","12"], correct: 0 },
+      { q: "Скільки буде 3/4 від 100?", a: ["75","70","80","25"], correct: 0 },
+      { q: "Яка цифра є парною?", a: ["4","3","7","9"], correct: 0 },
+      { q: "Скільки секунд в одній годині?", a: ["3600","600","360","1200"], correct: 0 },
+      { q: "Периметр квадрата зі стороною 5 см?", a: ["20 см","15 см","25 см","10 см"], correct: 0 },
+      { q: "2³ = ?", a: ["8","6","9","12"], correct: 0 },
+      { q: "Скільки буде 1/2 + 1/4?", a: ["3/4","1/2","2/4","1/3"], correct: 0 },
+      { q: "Скільки мм в 3 см?", a: ["30","300","3","0.3"], correct: 0 },
+      { q: "Площа прямокутника 6×4 = ?", a: ["24 кв.см","20 кв.см","10 кв.см","48 кв.см"], correct: 0 },
+      { q: "Найменше спільне кратне 4 і 6?", a: ["12","24","8","6"], correct: 0 },
+      { q: "Скільки буде 0.5 × 0.5?", a: ["0.25","0.5","0.1","1"], correct: 0 },
+      { q: "Яке число є простим?", a: ["7","4","9","6"], correct: 0 },
+      { q: "Скільки градусів у прямому куті?", a: ["90","180","45","360"], correct: 0 },
+      { q: "125 ÷ 5 = ?", a: ["25","20","30","15"], correct: 0 }
+    ],
+    6: [
+      { q: "Розв'яжи: 2x + 6 = 14. x = ?", a: ["4","3","7","8"], correct: 0 },
+      { q: "Відсотки: 20% від 80 = ?", a: ["16","12","20","8"], correct: 0 },
+      { q: "Скільки буде (-3) × (-4)?", a: ["12","-12","7","-7"], correct: 0 },
+      { q: "Площа трикутника: основа 8, висота 5. S = ?", a: ["20","40","16","24"], correct: 0 },
+      { q: "Скільки буде 2/3 × 9?", a: ["6","3","4","18"], correct: 0 },
+      { q: "Якщо a = -5, то |a| = ?", a: ["5","-5","0","25"], correct: 0 },
+      { q: "Скільки осей симетрії має правильний трикутник?", a: ["3","1","6","0"], correct: 0 },
+      { q: "Об'єм куба зі стороною 3 = ?", a: ["27","9","18","81"], correct: 0 },
+      { q: "Розв'яжи: x/3 = 7. x = ?", a: ["21","3","10","4"], correct: 0 },
+      { q: "Скільки буде 5² - 3² = ?", a: ["16","4","8","10"], correct: 0 },
+      { q: "Відсотки: число 200, це 40% від чого?", a: ["500","400","800","300"], correct: 0 },
+      { q: "Скільки діагоналей у прямокутнику?", a: ["2","4","1","0"], correct: 0 },
+      { q: "Скільки буде -8 + 15?", a: ["7","-7","23","-23"], correct: 0 },
+      { q: "1/5 у десятковому дробі = ?", a: ["0.2","0.5","0.25","0.1"], correct: 0 },
+      { q: "Периметр рівностороннього трикутника зі стороною 7 = ?", a: ["21","14","28","7"], correct: 0 }
+    ],
+    7: [
+      { q: "Розв'яжи: 3x - 7 = 11. x = ?", a: ["6","4","18","3"], correct: 0 },
+      { q: "Скільки буде (a+b)² = ?", a: ["a²+2ab+b²","a²+b²","a²-2ab+b²","2a+2b"], correct: 0 },
+      { q: "Теорема Піфагора: a²+b²= ?", a: ["c²","2c","a+b","c³"], correct: 0 },
+      { q: "Якщо катети 3 і 4, гіпотенуза = ?", a: ["5","7","6","12"], correct: 0 },
+      { q: "Скільки буде √144 = ?", a: ["12","14","11","13"], correct: 0 },
+      { q: "Лінійна функція y = 2x + 3 при x=5, y = ?", a: ["13","10","15","8"], correct: 0 },
+      { q: "Скільки буде a³ × a² = ?", a: ["a⁵","a⁶","2a⁵","a"], correct: 0 },
+      { q: "Скорочена формула: a²-b² = ?", a: ["(a-b)(a+b)","(a+b)²","(a-b)²","a(a-b)"], correct: 0 },
+      { q: "Кут трикутника: 50°, 70°, третій = ?", a: ["60°","80°","40°","90°"], correct: 0 },
+      { q: "Скільки буде 2^10 = ?", a: ["1024","512","256","2048"], correct: 0 },
+      { q: "Відсотки: 15% від 60 = ?", a: ["9","10","12","6"], correct: 0 },
+      { q: "Сума кутів трикутника = ?", a: ["180°","360°","270°","90°"], correct: 0 },
+      { q: "Скільки буде (-2)⁴ = ?", a: ["16","-16","8","-8"], correct: 0 },
+      { q: "Розв'яжи: 5(x-2) = 15. x = ?", a: ["5","3","7","2"], correct: 0 },
+      { q: "Якщо периметр квадрата 36, сторона = ?", a: ["9","6","12","4"], correct: 0 }
+    ],
+    8: [
+      { q: "Квадратне рівняння x²-5x+6=0. Коріння?", a: ["2 і 3","1 і 6","-2 і -3","1 і 5"], correct: 0 },
+      { q: "Скільки коренів має рівняння, якщо D < 0?", a: ["0","1","2","Нескінченно"], correct: 0 },
+      { q: "sin(90°) = ?", a: ["1","0","0.5","-1"], correct: 0 },
+      { q: "cos(0°) = ?", a: ["1","0","-1","0.5"], correct: 0 },
+      { q: "tg(45°) = ?", a: ["1","0","√2","0.5"], correct: 0 },
+      { q: "Формула площі кола?", a: ["πr²","2πr","πd","r²"], correct: 0 },
+      { q: "Довжина кола при r=7 (π≈3.14)?", a: ["43.96","49","21","154"], correct: 0 },
+      { q: "Дискримінант: D = ?", a: ["b²-4ac","b²+4ac","2b-4a","-b²+ac"], correct: 0 },
+      { q: "Скільки буде log₂(8) = ?", a: ["3","2","4","8"], correct: 0 },
+      { q: "Сума кутів чотирикутника = ?", a: ["360°","180°","270°","540°"], correct: 0 },
+      { q: "Функція y = x². Це яка парабола?", a: ["Звернена вгору","Звернена вниз","Лінія","Гіпербола"], correct: 0 },
+      { q: "Об'єм кулі: V = ?", a: ["4/3·πr³","πr²h","2πr²","πr³"], correct: 0 },
+      { q: "Якщо sin α = 0.6, cos α = ?", a: ["0.8","0.4","0.6","0.7"], correct: 0 },
+      { q: "Розв'яжи: x² = 49. x = ?", a: ["±7","7","-7","49"], correct: 0 },
+      { q: "Геометрична прогресія: 2, 6, 18... q = ?", a: ["3","2","4","6"], correct: 0 }
+    ],
+    9: [
+      { q: "Похідна f(x) = x³ = ?", a: ["3x²","x²","3x","2x³"], correct: 0 },
+      { q: "Похідна f(x) = sin(x) = ?", a: ["cos(x)","-cos(x)","sin(x)","-sin(x)"], correct: 0 },
+      { q: "∫x dx = ?", a: ["x²/2 + C","x² + C","2x + C","x/2 + C"], correct: 0 },
+      { q: "Границя lim(x→∞) 1/x = ?", a: ["0","∞","1","-1"], correct: 0 },
+      { q: "Комплексне число: i² = ?", a: ["-1","1","i","-i"], correct: 0 },
+      { q: "Логарифм: lg(100) = ?", a: ["2","10","1","3"], correct: 0 },
+      { q: "Формула: sin²α + cos²α = ?", a: ["1","0","2","sin(2α)"], correct: 0 },
+      { q: "Арифметична прогресія: aₙ = a₁ + ?", a: ["(n-1)d","nd","(n+1)d","n·d/2"], correct: 0 },
+      { q: "Похідна f(x) = eˣ = ?", a: ["eˣ","xeˣ","e^(x-1)","1/eˣ"], correct: 0 },
+      { q: "Скільки буде C(5,2) (комбінації)?", a: ["10","20","5","15"], correct: 0 },
+      { q: "Ймовірність події: P = ?", a: ["m/n (сприятливі/усі)","n/m","m+n","m-n"], correct: 0 },
+      { q: "Що таке асимптота?", a: ["Лінія, до якої прямує графік, але не перетинає","Корінь рівняння","Точка перегину","Максимум функції"], correct: 0 },
+      { q: "Скільки буде 0! (нуль-факторіал)?", a: ["1","0","∞","Не існує"], correct: 0 },
+      { q: "Стандартна форма числа 0.0045 = ?", a: ["4.5×10⁻³","4.5×10³","45×10⁻⁴","0.45×10⁻²"], correct: 0 },
+      { q: "Похідна константи f(x) = 7 = ?", a: ["0","7","1","-7"], correct: 0 }
+    ]
+  },
+  english: {
+    5: [
+      { q: "Переклади: 'apple'", a: ["яблуко","апельсин","банан","груша"], correct: 0 },
+      { q: "Яке займенник першої особи множини?", a: ["We","I","You","They"], correct: 0 },
+      { q: "Правильна форма: 'She ... a student'", a: ["is","are","am","be"], correct: 0 },
+      { q: "Переклади: 'book'", a: ["книга","ручка","олівець","зошит"], correct: 0 },
+      { q: "Яке питальне слово позначає «коли»?", a: ["When","Where","Who","What"], correct: 0 },
+      { q: "Присвійний займенник від 'I'?", a: ["My","Me","Mine","I"], correct: 0 },
+      { q: "Переклади: 'school'", a: ["школа","клас","підручник","урок"], correct: 0 },
+      { q: "Правильна форма: 'They ... friends'", a: ["are","is","am","be"], correct: 0 },
+      { q: "Як сказати 'доброго ранку'?", a: ["Good morning","Good night","Good evening","Good day"], correct: 0 },
+      { q: "Переклади: 'cat'", a: ["кіт","собака","птах","риба"], correct: 0 },
+      { q: "Яке число множини від 'child'?", a: ["children","childs","childes","child"], correct: 0 },
+      { q: "Переклади: 'run'", a: ["бігти","йти","стрибати","лежати"], correct: 0 },
+      { q: "Правильна форма Present Simple: 'He ... to school'", a: ["goes","go","going","went"], correct: 0 },
+      { q: "Переклади: 'family'", a: ["сім'я","друг","школа","дитина"], correct: 0 },
+      { q: "Яке слово означає протилежне до 'big'?", a: ["small","tall","old","fast"], correct: 0 }
+    ],
+    6: [
+      { q: "Яке речення у Present Continuous?", a: ["She is reading","She reads","She read","She has read"], correct: 0 },
+      { q: "Відповідь на 'Did he go?' — 'Yes, he ...'", a: ["did","does","was","went"], correct: 0 },
+      { q: "Past Simple від 'go'?", a: ["went","goed","gone","go"], correct: 0 },
+      { q: "Past Simple від 'eat'?", a: ["ate","eated","eaten","eat"], correct: 0 },
+      { q: "Переклади: 'yesterday'", a: ["вчора","сьогодні","завтра","зараз"], correct: 0 },
+      { q: "Яке слово є прислівником частоти?", a: ["always","quickly","here","soon"], correct: 0 },
+      { q: "Переклади: 'breakfast'", a: ["сніданок","обід","вечеря","перекус"], correct: 0 },
+      { q: "Яке слово є антонімом до 'hot'?", a: ["cold","warm","cool","icy"], correct: 0 },
+      { q: "Яке питальне слово позначає місце?", a: ["Where","When","Who","What"], correct: 0 },
+      { q: "Правильна форма Future Simple: 'She ... come'", a: ["will","shall","would","going"], correct: 0 },
+      { q: "Переклади: 'homework'", a: ["домашнє завдання","урок","клас","оцінка"], correct: 0 },
+      { q: "Як сказати «сонячно» по-англійськи?", a: ["sunny","rainy","cloudy","windy"], correct: 0 },
+      { q: "Присвійний займенник від 'they'?", a: ["their","they're","there","theirs"], correct: 0 },
+      { q: "Переклади: 'dangerous'", a: ["небезпечний","важкий","швидкий","цікавий"], correct: 0 },
+      { q: "Порівняльний ступінь від 'good'?", a: ["better","gooder","more good","goodest"], correct: 0 }
+    ],
+    7: [
+      { q: "Яке речення у Present Perfect?", a: ["I have seen it","I saw it","I see it","I was seeing it"], correct: 0 },
+      { q: "3-я форма дієслова 'write'?", a: ["written","wrote","write","writed"], correct: 0 },
+      { q: "Переклади: 'although'", a: ["хоча","тому що","якщо","але"], correct: 0 },
+      { q: "Умовне речення 1 типу: структура?", a: ["if + Present, will + V","if + Past, would + V","if + Past Perf, would have + V","if + V, shall + V"], correct: 0 },
+      { q: "Форма Passive Voice у минулому?", a: ["was/were + V3","is/are + V3","has been + V3","will be + V3"], correct: 0 },
+      { q: "Переклади: 'despite'", a: ["незважаючи на","тому що","перш ніж","після того як"], correct: 0 },
+      { q: "'I ... to the cinema last week' — вставити?", a: ["went","go","have gone","will go"], correct: 0 },
+      { q: "Питання у Present Perfect: правильна форма?", a: ["Have you ever been to Paris?","Did you ever go?","Do you ever go?","Were you to Paris?"], correct: 0 },
+      { q: "Переклади: 'environment'", a: ["довкілля / середовище","оточення","природа","місцевість"], correct: 0 },
+      { q: "Синонім до 'happy'?", a: ["glad","sad","angry","bored"], correct: 0 },
+      { q: "Reported Speech від 'I am tired'?", a: ["He said he was tired","He said he is tired","He says he was tired","He told I am tired"], correct: 0 },
+      { q: "'She ... here for 5 years' — Present Perfect?", a: ["has lived","have lived","lived","is living"], correct: 0 },
+      { q: "Переклади: 'achievement'", a: ["досягнення","завдання","нагорода","результат"], correct: 0 },
+      { q: "Правильний артикль: '... elephant'?", a: ["an","a","the","—"], correct: 0 },
+      { q: "Артикль перед словом на голосну?", a: ["an","a","the","some"], correct: 0 }
+    ],
+    8: [
+      { q: "Second Conditional — правильна форма?", a: ["If I were rich, I would travel","If I am rich, I will travel","If I had been rich, I would have travelled","I was rich so I travelled"], correct: 0 },
+      { q: "Third Conditional — правильна форма?", a: ["If she had studied, she would have passed","If she studied, she would pass","If she studies, she will pass","She studied and passed"], correct: 0 },
+      { q: "Переклади: 'reliable'", a: ["надійний","залежний","незалежний","неймовірний"], correct: 0 },
+      { q: "Герундій від 'swim'?", a: ["swimming","to swim","swims","swam"], correct: 0 },
+      { q: "'I'm used to ... early' — вставити?", a: ["getting up","get up","got up","to get up"], correct: 0 },
+      { q: "Phrasal verb 'give up' означає?", a: ["відмовитись","піднімати","дати","починати"], correct: 0 },
+      { q: "Переклади: 'approximately'", a: ["приблизно","точно","загалом","справді"], correct: 0 },
+      { q: "Антонім до 'optimistic'?", a: ["pessimistic","realistic","idealistic","enthusiastic"], correct: 0 },
+      { q: "Passive у Present Perfect?", a: ["The letter has been sent","The letter was sent","The letter is sent","The letter had been sent"], correct: 0 },
+      { q: "Переклади: 'challenging'", a: ["складний / що кидає виклик","легкий","нудний","цікавий"], correct: 0 },
+      { q: "Синонім до 'enormous'?", a: ["huge","tiny","narrow","flat"], correct: 0 },
+      { q: "'By the time she arrived, he ...' — форма?", a: ["had left","left","has left","leaves"], correct: 0 },
+      { q: "Що таке Modal verb?", a: ["Допоміжне дієслово (can, must, should)","Іменник","Прикметник","Прийменник"], correct: 0 },
+      { q: "Переклади: 'whereas'", a: ["тоді як","тому що","щоб","якщо"], correct: 0 },
+      { q: "Функція 'used to'?", a: ["Минула звичка або стан","Теперішня звичка","Майбутня дія","Умовна дія"], correct: 0 }
+    ],
+    9: [
+      { q: "Що таке інверсія в англійській граматиці?", a: ["Зміна порядку підмета і присудка","Заперечення речення","Вживання Passive","Пряма мова"], correct: 0 },
+      { q: "'Hardly ... when' — яке слово далі?", a: ["had","has","does","did"], correct: 0 },
+      { q: "Переклади: 'consequently'", a: ["отже","проте","тим не менш","навпаки"], correct: 0 },
+      { q: "Синонім до 'subsequently'?", a: ["afterwards","previously","simultaneously","initially"], correct: 0 },
+      { q: "Subjunctive: 'I suggest that he ... here'?", a: ["be","is","was","were"], correct: 0 },
+      { q: "Cleft sentence 'It was John who ...' — що підкреслює?", a: ["Один елемент речення","Пасивний стан","Питання","Відносне підрядне"], correct: 0 },
+      { q: "Переклади: 'ambiguous'", a: ["неоднозначний","невизначений","ясний","невпевнений"], correct: 0 },
+      { q: "Антонім до 'reluctant'?", a: ["willing","eager","hesitant","unwilling"], correct: 0 },
+      { q: "'Having finished the work, she left' — структура?", a: ["Perfect Participle Clause","Gerund Clause","Passive Clause","Relative Clause"], correct: 0 },
+      { q: "Переклади: 'inevitable'", a: ["неминучий","можливий","ймовірний","бажаний"], correct: 0 },
+      { q: "Маркер для додавання аргументу в Academic Writing?", a: ["Furthermore","However","Nevertheless","In contrast"], correct: 0 },
+      { q: "Що означає 'mixed conditional'?", a: ["Поєднання умов різних типів","Умовне речення 1 типу","Умовне речення 2 типу","Пасивний стан"], correct: 0 },
+      { q: "Переклади: 'notwithstanding'", a: ["незважаючи на","завдяки","через","за умови"], correct: 0 },
+      { q: "'I wish I ... taller' (про теперішнє) — форма?", a: ["were","am","was","be"], correct: 0 },
+      { q: "Що таке 'collocation'?", a: ["Типове сполучення слів","Помилка в граматиці","Тип артикля","Форма дієслова"], correct: 0 }
+    ]
+  }
+};
+
+// ============================================================
+//  GAME LOGIC
+// ============================================================
+const TOTAL_Q = 15;
+const TIMER_SEC = 20;
+const SUBJECT_NAMES = { history:'🏛️ ІСТОРІЯ', physics:'⚡ ФІЗИКА', geography:'🌍 ГЕОГРАФІЯ', math:'➗ МАТЕМАТИКА', english:'🇬🇧 АНГЛІЙСЬКА' };
+
+let state = {
+  playerName: 'ГРАВЕЦЬ_1',
+  grade: null,
+  subject: null,
+  questions: [],
+  current: 0,
+  score: 0,
+  lives: 3,
+  timer: null,
+  timeLeft: TIMER_SEC,
+  totalTime: 0,
+  timeInterval: null,
+  answered: false
+};
+
+// Screen manager
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ---- SPLASH ----
+document.getElementById('screen-splash').addEventListener('click', () => showScreen('screen-rules'));
+
+// ---- RULES → SELECT ----
+document.getElementById('btn-start-select').addEventListener('click', () => {
+  state.playerName = document.getElementById('player-name').value.trim().toUpperCase() || 'ГРАВЕЦЬ_1';
+  showScreen('screen-select');
+});
+
+// ---- BACK ----
+document.getElementById('btn-back-rules').addEventListener('click', () => showScreen('screen-rules'));
+
+// ---- GRADE SELECTION ----
+document.querySelectorAll('.grade-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('selected'));
+    this.classList.add('selected');
+    state.grade = parseInt(this.dataset.grade);
+    document.getElementById('subject-section').classList.remove('hidden');
+    document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('selected'));
+    state.subject = null;
+    document.getElementById('btn-go-quiz').classList.add('hidden');
+  });
+});
+
+// ---- SUBJECT SELECTION ----
+document.querySelectorAll('.subject-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('selected'));
+    this.classList.add('selected');
+    state.subject = this.dataset.subject;
+    document.getElementById('btn-go-quiz').classList.remove('hidden');
+  });
+});
+
+// ---- START QUIZ ----
+document.getElementById('btn-go-quiz').addEventListener('click', startQuiz);
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz() {
+  const pool = QUESTIONS[state.subject][state.grade];
+  state.questions = shuffle(pool).slice(0, TOTAL_Q);
+  state.current = 0;
+  state.score = 0;
+  state.lives = 3;
+  state.totalTime = 0;
+  state.answered = false;
+
+  // reset hearts
+  for (let i = 1; i <= 3; i++) {
+    const h = document.getElementById('h' + i);
+    h.textContent = '❤️';
+    h.className = 'heart';
+  }
+
+  // labels
+  document.getElementById('quiz-grade-label').textContent = `📚 ${state.grade} КЛАС`;
+  document.getElementById('quiz-subject-label').textContent = SUBJECT_NAMES[state.subject];
+
+  showScreen('screen-quiz');
+  loadQuestion();
+}
+
+function loadQuestion() {
+  if (state.current >= TOTAL_Q) { endWin(); return; }
+
+  state.answered = false;
+  const q = state.questions[state.current];
+
+  document.getElementById('q-num').textContent = state.current + 1;
+  document.getElementById('progress-fill').style.width = ((state.current / TOTAL_Q) * 100) + '%';
+  document.getElementById('question-text').textContent = q.q;
+
+  const feedback = document.getElementById('feedback-msg');
+  feedback.className = 'feedback-msg hidden';
+  feedback.textContent = '';
+
+  // Shuffle answers keeping track of correct
+  const indexed = q.a.map((text, i) => ({ text, isCorrect: i === q.correct }));
+  const shuffled = shuffle(indexed);
+
+  for (let i = 0; i < 4; i++) {
+    const btn = document.getElementById('ans-' + i);
+    btn.textContent = shuffled[i].text;
+    btn.dataset.correct = shuffled[i].isCorrect ? '1' : '0';
+    btn.className = 'answer-btn pixel-box';
+    btn.disabled = false;
+  }
+
+  startTimer();
+}
+
+function startTimer() {
+  clearInterval(state.timer);
+  state.timeLeft = TIMER_SEC;
+  updateTimerUI(TIMER_SEC);
+
+  state.timer = setInterval(() => {
+    state.timeLeft--;
+    state.totalTime++;
+    updateTimerUI(state.timeLeft);
+    if (state.timeLeft <= 0) {
+      clearInterval(state.timer);
+      handleTimeout();
+    }
+  }, 1000);
+}
+
+function updateTimerUI(t) {
+  document.getElementById('timer-num').textContent = t;
+  const bar = document.getElementById('timer-bar');
+  bar.style.width = ((t / TIMER_SEC) * 100) + '%';
+  bar.className = 'timer-bar';
+  if (t <= 5) bar.classList.add('danger');
+  else if (t <= 10) bar.classList.add('warning');
+}
+
+function handleTimeout() {
+  if (state.answered) return;
+  state.answered = true;
+
+  // Show correct answer
+  for (let i = 0; i < 4; i++) {
+    const btn = document.getElementById('ans-' + i);
+    btn.disabled = true;
+    if (btn.dataset.correct === '1') btn.classList.add('correct');
+    else btn.classList.add('dim');
+  }
+
+  showFeedback('⏱️ ЧАС ВИЙШОВ!', 'timeout-fb');
+  loseLife();
+}
+
+document.querySelectorAll('.answer-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    if (state.answered) return;
+    state.answered = true;
+    clearInterval(state.timer);
+    state.totalTime += (TIMER_SEC - state.timeLeft);
+
+    const correct = this.dataset.correct === '1';
+
+    for (let i = 0; i < 4; i++) {
+      const b = document.getElementById('ans-' + i);
+      b.disabled = true;
+      if (b.dataset.correct === '1') b.classList.add('correct');
+      else if (b === this && !correct) b.classList.add('wrong');
+      else b.classList.add('dim');
+    }
+
+    if (correct) {
+      state.score++;
+      showFeedback('✅ ПРАВИЛЬНО!', 'correct-fb');
+      setTimeout(nextQuestion, 1200);
+    } else {
+      showFeedback('❌ НЕПРАВИЛЬНО!', 'wrong-fb');
+      loseLife();
+    }
+  });
+});
+
+function showFeedback(msg, cls) {
+  const el = document.getElementById('feedback-msg');
+  el.textContent = msg;
+  el.className = 'feedback-msg ' + cls;
+}
+
+function loseLife() {
+  state.lives--;
+  const h = document.getElementById('h' + (3 - state.lives));
+  if (h) {
+    h.textContent = '🖤';
+    h.classList.add('lost');
+    h.classList.add('shake');
+    setTimeout(() => h.classList.remove('shake'), 400);
+  }
+
+  if (state.lives <= 0) {
+    setTimeout(endLose, 1200);
+  } else {
+    setTimeout(nextQuestion, 1200);
+  }
+}
+
+function nextQuestion() {
+  state.current++;
+  loadQuestion();
+}
+
+function endLose() {
+  clearInterval(state.timer);
+  document.getElementById('lose-score').innerHTML = `Правильних відповідей: <strong>${state.score}</strong>`;
+  document.getElementById('lose-question').innerHTML = `Зупинився(-лась) на запитанні: <strong>${state.current + 1}</strong>`;
+  showScreen('screen-lose');
+}
+
+function endWin() {
+  clearInterval(state.timer);
+  document.getElementById('win-score').innerHTML = `Правильних відповідей: <strong>${state.score}/${TOTAL_Q}</strong>`;
+  document.getElementById('win-time').innerHTML = `Витрачено часу: <strong>${state.totalTime} сек</strong>`;
+  document.getElementById('name-save-section').classList.remove('hidden');
+  document.getElementById('progress-fill').style.width = '100%';
+  spawnConfetti();
+  showScreen('screen-win');
+}
+
+// ---- LEADERBOARD ----
+function getLeaderboard() {
+  try { return JSON.parse(localStorage.getItem('pixelQuizLB') || '[]'); } catch { return []; }
+}
+function saveLeaderboard(lb) {
+  localStorage.setItem('pixelQuizLB', JSON.stringify(lb));
+}
+
+document.getElementById('btn-save-score').addEventListener('click', () => {
+  const lb = getLeaderboard();
+  lb.push({
+    name: state.playerName,
+    grade: state.grade,
+    subject: state.subject,
+    score: state.score,
+    time: state.totalTime
+  });
+  saveLeaderboard(lb);
+  document.getElementById('name-save-section').classList.add('hidden');
+
+  // Check genius: all 5 subjects for this grade won
+  const allSubjects = ['history','physics','geography','math','english'];
+  const wonSubjects = new Set(lb.filter(e => e.grade === state.grade).map(e => e.subject));
+  if (allSubjects.every(s => wonSubjects.has(s))) {
+    setTimeout(() => showScreen('screen-genius'), 500);
+    return;
+  }
+});
+
+document.getElementById('btn-leaderboard').addEventListener('click', () => {
+  renderLeaderboard(document.querySelector('.lb-tab.active')?.dataset.grade || '5');
+  showScreen('screen-leaderboard');
+});
+
+// LB tabs
+document.querySelectorAll('.lb-tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.lb-tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+    renderLeaderboard(this.dataset.grade);
+  });
+});
+
+function renderLeaderboard(grade) {
+  const lb = getLeaderboard().filter(e => String(e.grade) === String(grade));
+  lb.sort((a, b) => b.score - a.score || a.time - b.time);
+
+  const container = document.getElementById('lb-rows');
+  if (!lb.length) {
+    container.innerHTML = '<div class="no-entries">ЩЕ НЕМАЄ ЗАПИСІВ</div>';
+    return;
+  }
+
+  container.innerHTML = lb.slice(0, 10).map((e, i) => {
+    const rankClass = i === 0 ? 'lb-rank-1' : i === 1 ? 'lb-rank-2' : i === 2 ? 'lb-rank-3' : '';
+    const subjIcon = { history:'🏛️', physics:'⚡', geography:'🌍', math:'➗', english:'🇬🇧' }[e.subject] || '';
+    return `<div class="lb-row ${rankClass}">
+      <span>${i + 1}</span>
+      <span>${e.name}</span>
+      <span>${subjIcon}</span>
+      <span>${e.score}/${TOTAL_Q}</span>
+      <span>${e.time}с</span>
+    </div>`;
+  }).join('');
+}
+
+// ---- RETRY / MENU ----
+document.getElementById('btn-retry').addEventListener('click', () => startQuiz());
+document.getElementById('btn-menu-lose').addEventListener('click', () => showScreen('screen-splash'));
+document.getElementById('btn-menu-win').addEventListener('click', () => showScreen('screen-splash'));
+document.getElementById('btn-menu-genius').addEventListener('click', () => showScreen('screen-splash'));
+document.getElementById('btn-menu-lb').addEventListener('click', () => showScreen('screen-splash'));
+
+// ---- CONFETTI ----
+function spawnConfetti() {
+  const container = document.getElementById('confetti');
+  container.innerHTML = '';
+  const colors = ['#FFE135','#5BDB6F','#5BC8FF','#FF5757','#C86BFF','#FF9B42'];
+  for (let i = 0; i < 60; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + 'vw';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDuration = (2 + Math.random() * 3) + 's';
+    piece.style.animationDelay = (Math.random() * 2) + 's';
+    piece.style.width = (8 + Math.random() * 10) + 'px';
+    piece.style.height = (8 + Math.random() * 10) + 'px';
+    container.appendChild(piece);
+  }
+}
+</script>
+</body>
+</html>
